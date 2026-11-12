@@ -1,0 +1,23 @@
+# Bidding zones to collect. EIC codes from the ENTSO-E Transparency Platform.
+zones:
+  LT:
+    eic: "10YLT-1001A00074"
+    timezone: "Europe/Vilnius"
+
+# Series fetched for each zone.
+#   load_actual        Actual total load (A65, process A16), MW
+#   load_forecast_tso  TSO day-ahead total load forecast (A65, process A01), MW
+#   price_day_ahead    Day-ahead market price (A44), EUR/MWh
+series: [load_actual, load_forecast_tso, price_day_ahead]
+
+backfill_start: "2023-01-01"   # first date loaded by a full backfill
+daily_lookback_days: 7          # the daily job re-fetches this many days to pick up revisions
+
+checks:
+  max_gap_hours: 3              # longest tolerated run of missing hours
+  stale_after_hours: 48         # newest actual load must be more recent than this
+  load_mw: [100, 5000]          # plausible range for Lithuania
+  price_eur_mwh: [-500, 4000]   # SDAC harmonised min and max clearing prices
+
+forecast:
+  holdout_weeks: 8
