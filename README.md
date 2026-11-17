@@ -111,5 +111,10 @@ acknowledgements; request chunking with a fake HTTP session; and PostgreSQL inte
 tests for idempotent upserts, the SQL marts, quality checks, the forecast, and the
 export/restore round trip. CI runs them against a PostgreSQL 16 service container.
 
+## How this was built
+
+I designed the analysis and checked the results. I used Claude Code as
+a coding assistant.
+
 ---
 Mantas Valantinavičius · [github.com/mantas123456](https://github.com/mantas123456)
