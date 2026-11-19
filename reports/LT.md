@@ -1,6 +1,6 @@
 # LT electricity report
 
-Updated 2026-11-19 12:06 UTC by the scheduled pipeline. Data: ENTSO-E Transparency Platform.
+Updated 2026-11-19 18:23 UTC by the scheduled pipeline. Data: ENTSO-E Transparency Platform.
 
 ## Day-ahead load forecast, last 8 weeks
 
@@ -43,12 +43,12 @@ The table above averages over all backtest weeks. A forecast can come out ahead 
 
 ## Data quality
 
-Generated 2026-11-19 12:06 UTC
+Generated 2026-11-19 18:23 UTC
 
 | Zone | Check | Result | Detail |
 |---|---|---|---|
-| LT | load is fresh | ✅ pass | latest actual load 2026-11-19 11:00 UTC (1 h old) |
+| LT | load is fresh | ✅ pass | latest actual load 2026-11-19 17:00 UTC (1 h old) |
 | LT | no gaps in actual load | ✅ pass | 0 missing hours, longest gap 0 h (last 30 days) |
 | LT | load within 100..5000 | ✅ pass | 0 of 719 hours outside range |
-| LT | price within -500..4000 | ✅ pass | 0 of 730 hours outside range |
-| LT | complete hours | ⚠️ warn | 2 hours built from incomplete sub-hourly data |
+| LT | price within -500..4000 | ✅ pass | 0 of 748 hours outside range |
+| LT | complete hours | ⚠️ warn | 1 hours built from incomplete sub-hourly data |
