@@ -23,6 +23,10 @@ log = logging.getLogger(__name__)
 ROOT = Path.cwd()
 
 
+class NoDataError(RuntimeError):
+    """A zone has no hourly data to forecast or report on."""
+
+
 def load_config(path: str | Path = "config.yaml") -> dict:
     with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
@@ -148,6 +152,11 @@ def run_forecast(eng: Engine, cfg: dict, zone: str, country: str | None = None):
         "WHERE zone = :zone ORDER BY ts_hour",
         zone=zone,
     )
+    if h["load_mw"].isna().all():
+        raise NoDataError(
+            f"No load data for zone {zone} in mart_hourly. ENTSO-E returned no points: "
+            f"check the zone's EIC code in config.yaml and the ingest log above."
+        )
     h["ts_hour"] = pd.to_datetime(h["ts_hour"], utc=True)
     feat = forecast.features(h, tz, country or zone, extra_hours=forecast.MIN_LAG_H)
     metrics, preds = forecast.evaluate(feat, cfg["forecast"]["holdout_weeks"])

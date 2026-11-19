@@ -3,6 +3,6 @@
   <mRID>x</mRID>
   <Reason>
     <code>999</code>
-    <text>No matching data found for Data item Day-ahead Prices [12.1.D] (10YLT-1001A00074, 10YLT-1001A00074) and interval 2030-01-01T00:00:00.000Z/2030-01-02T00:00:00.000Z.</text>
+    <text>No matching data found for Data item Day-ahead Prices [12.1.D] (10YLT-1001A0008Q, 10YLT-1001A0008Q) and interval 2030-01-01T00:00:00.000Z/2030-01-02T00:00:00.000Z.</text>
   </Reason>
 </Acknowledgement_MarketDocument>
