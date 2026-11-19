@@ -71,14 +71,14 @@ def test_client_chunks_long_ranges_and_builds_params():
     c = EntsoeClient("token", session=s, max_days_per_request=30, pause_s=0)
     df = c.fetch(
         "load_actual",
-        "10YLT-1001A00074",
+        "10YLT-1001A0008Q",
         datetime(2026, 1, 1, tzinfo=timezone.utc),
         datetime(2026, 3, 1, tzinfo=timezone.utc),
     )
     assert len(s.calls) == 2
     p = s.calls[0]
     assert p["documentType"] == "A65" and p["processType"] == "A16"
-    assert p["outBiddingZone_Domain"] == "10YLT-1001A00074"
+    assert p["outBiddingZone_Domain"] == "10YLT-1001A0008Q"
     assert p["periodStart"] == "202601010000" and p["periodEnd"] == "202601310000"
     assert len(df) == 4  # duplicate points across chunks are removed
 

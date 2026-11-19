@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
+import pytest
 
 from energy_pipeline import db, forecast, pipeline, quality
 
 CFG = {
-    "zones": {"LT": {"eic": "10YLT-1001A00074", "timezone": "Europe/Vilnius"}},
+    "zones": {"LT": {"eic": "10YLT-1001A0008Q", "timezone": "Europe/Vilnius"}},
     "series": ["load_actual", "load_forecast_tso", "price_day_ahead"],
     "checks": {
         "max_gap_hours": 3,
@@ -145,3 +146,10 @@ def test_ingest_loads_other_series_when_one_fails(eng):
     assert runs["status"].tolist() == ["ok", "ok", "error"]
     n = db.read_sql(eng, "SELECT count(*) AS n FROM raw_observations")["n"].iloc[0]
     assert n == 2 * 48
+
+
+def test_forecast_without_data_raises_clear_error(eng):
+    pipeline.sync_zones(eng, CFG)
+    db.transform(eng)
+    with pytest.raises(pipeline.NoDataError, match="No load data for zone LT"):
+        pipeline.run_forecast(eng, CFG, "LT")

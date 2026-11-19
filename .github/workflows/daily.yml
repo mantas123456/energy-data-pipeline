@@ -34,10 +34,13 @@ jobs:
       DATABASE_URL: postgresql+psycopg://pipeline:pipeline@localhost:5432/energy
       ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
     steps:
-      - name: Stop if the API key is not configured
+      - name: Skip if the API key is not configured
         if: env.ENTSOE_API_KEY == ''
         run: |
-          echo "::warning::Add the ENTSOE_API_KEY repository secret to enable the daily refresh."
+          msg="ENTSOE_API_KEY secret is not set: skipping the daily refresh (no data fetched, nothing committed). Add the repository secret to enable it."
+          echo "::notice title=Daily refresh skipped::$msg"
+          echo "### Daily refresh skipped" >> "$GITHUB_STEP_SUMMARY"
+          echo "$msg" >> "$GITHUB_STEP_SUMMARY"
           exit 0
 
       - uses: actions/checkout@v4

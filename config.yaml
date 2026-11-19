@@ -1,7 +1,7 @@
 # Bidding zones to collect. EIC codes from the ENTSO-E Transparency Platform.
 zones:
   LT:
-    eic: "10YLT-1001A00074"
+    eic: "10YLT-1001A0008Q"
     timezone: "Europe/Vilnius"
 
 # Series fetched for each zone.

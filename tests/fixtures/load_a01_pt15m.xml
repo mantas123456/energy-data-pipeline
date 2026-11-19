@@ -6,7 +6,7 @@
   <TimeSeries>
     <mRID>1</mRID>
     <businessType>A04</businessType>
-    <outBiddingZone_Domain.mRID codingScheme="A01">10YLT-1001A00074</outBiddingZone_Domain.mRID>
+    <outBiddingZone_Domain.mRID codingScheme="A01">10YLT-1001A0008Q</outBiddingZone_Domain.mRID>
     <quantity_Measure_Unit.name>MAW</quantity_Measure_Unit.name>
     <curveType>A01</curveType>
     <Period>

@@ -1,0 +1,55 @@
+name: Weekly report
+
+on:
+  schedule:
+    - cron: "41 10 * * 1"   # Mondays 10:41 UTC, after the daily refresh (09:17 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Same group as the daily refresh, so the two jobs never push at the same time.
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: pipeline
+          POSTGRES_PASSWORD: pipeline
+          POSTGRES_DB: energy
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U pipeline" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://pipeline:pipeline@localhost:5432/energy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+
+      # Reads the data the daily job commits to data/; no API key needed.
+      - name: Write reports/latest.md, reports/latest.png and the README block
+        run: pipeline weekly
+
+      - name: Commit the report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/latest.md reports/latest.png README.md
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Weekly report $(date -u +%Y-%m-%d)"
+            git pull --rebase
+            git push
+          fi
