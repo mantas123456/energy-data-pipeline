@@ -110,7 +110,13 @@ def test_forecast_and_report(eng, tmp_path):
     assert ahead.index.min() > preds.index.max()
     checks = quality.run_checks(eng, CFG, now=pd.Timestamp("2026-04-23T12:00Z"))
     path = pipeline.write_report(eng, CFG, "LT", metrics, preds, checks, out=tmp_path)
-    assert "Day-ahead load forecast" in path.read_text()
+    report = path.read_text()
+    assert "Day-ahead load forecast" in report
+    # One row per backtest week (holdout_weeks = 2), with the same week boundaries.
+    assert "### Week by week" in report
+    weekly = forecast.weekly_metrics(preds, "Europe/Vilnius")
+    assert len(weekly) == CFG["forecast"]["holdout_weeks"]
+    assert weekly["hours"].sum() == len(preds)
     assert (tmp_path / "LT_forecast.png").exists()
 
 

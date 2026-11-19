@@ -238,6 +238,13 @@ def write_report(
         f"## Day-ahead load forecast, last {cfg['forecast']['holdout_weeks']} weeks\n",
         metrics.to_markdown(index=False),
         "",
+        "### Week by week\n",
+        "The table above averages over all backtest weeks. A forecast can come out ahead "
+        "overall because of a few weeks where the other did badly, so check here whether "
+        "the ranking holds week by week. Bias is forecast minus actual: negative means "
+        "the forecast was too low.\n",
+        forecast.weekly_metrics(preds, tz).round(1).to_markdown(index=False),
+        "",
         f"![Forecasts]({zone}_forecast.png)\n",
         "## Last 7 days\n",
         recent.round(1).to_markdown(index=False),
