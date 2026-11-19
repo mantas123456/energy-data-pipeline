@@ -105,6 +105,7 @@ def evaluate(feat: pd.DataFrame, weeks: int) -> tuple[pd.DataFrame, pd.DataFrame
                     "Model (no weather)": m.predict(test[FEATURES]),
                     "Naive (same hour last week)": test["lag_168h"],
                     "TSO day-ahead forecast": test["tso_forecast_mw"],
+                    "week_start": start,
                 },
                 index=test.index,
             )
@@ -113,7 +114,7 @@ def evaluate(feat: pd.DataFrame, weeks: int) -> tuple[pd.DataFrame, pd.DataFrame
         raise ValueError("not enough history for the backtest (need about 10 weeks)")
     p = pd.concat(preds)
     rows = []
-    for method in p.columns.drop("actual"):
+    for method in p.columns.drop(["actual", "week_start"]):
         both = p[["actual", method]].dropna()
         err = both[method] - both["actual"]
         rows.append(
@@ -126,6 +127,28 @@ def evaluate(feat: pd.DataFrame, weeks: int) -> tuple[pd.DataFrame, pd.DataFrame
             }
         )
     return pd.DataFrame(rows).sort_values("mae_mw").round(2), p
+
+
+WEEKLY_METHODS = {"Model (no weather)": "Model", "TSO day-ahead forecast": "TSO"}
+
+
+def weekly_metrics(preds: pd.DataFrame, tz: str) -> pd.DataFrame:
+    """MAE, MAPE and bias for each backtest week, for the model and the TSO forecast.
+
+    The overall metrics average over all weeks; this shows whether the ranking holds
+    week by week (a forecast can win overall because of a few bad weeks of the other).
+    """
+    rows = []
+    for start, g in preds.groupby("week_start", sort=True):
+        row = {"week_from": f"{start.tz_convert(tz):%Y-%m-%d}", "hours": len(g)}
+        for method, short in WEEKLY_METHODS.items():
+            both = g[["actual", method]].dropna()
+            err = both[method] - both["actual"]
+            row[f"{short} MAE (MW)"] = err.abs().mean()
+            row[f"{short} MAPE (%)"] = 100 * (err.abs() / both["actual"]).mean()
+            row[f"{short} bias (MW)"] = err.mean()
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 def forecast_ahead(feat: pd.DataFrame) -> pd.DataFrame:
