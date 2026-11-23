@@ -4,11 +4,11 @@
 [![Daily data refresh](https://github.com/mantas123456/energy-data-pipeline/actions/workflows/daily.yml/badge.svg)](https://github.com/mantas123456/energy-data-pipeline/actions/workflows/daily.yml)
 
 <!-- weekly-report:start -->
-**Last 7 days:** 2026-11-12 13:00 to 2026-11-19 12:00 (Europe/Vilnius time). Updated weekly; [full report](reports/latest.md).
+**Last 7 days:** 2026-11-17 00:00 to 2026-11-23 23:00 (Europe/Vilnius time). Updated weekly; [full report](reports/latest.md).
 
 | TSO forecast error (MAPE) | Average day-ahead price | Hours with missing data |
 |---|---|---|
-| 1.85 % (MAE 32 MW) | 148.1 EUR/MWh | 0 of 168 |
+| 1.68 % (MAE 29 MW) | 178.9 EUR/MWh | 0 of 168 |
 
 ![Last 7 days: load, TSO forecast and price profile](reports/latest.png)
 <!-- weekly-report:end -->
